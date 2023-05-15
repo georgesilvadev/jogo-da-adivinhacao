@@ -9,11 +9,7 @@ let xAttempts = 1;
 //Eventos
 btnTry.addEventListener('click', handleTryClick)
 btnReset.addEventListener('click', handleResetClick)
-document.addEventListener('keydown', function(e){
-  if(e.key == 'Enter' && screen1.classList.contains('hide')){
-    handleResetClick()
-  }
-})
+document.addEventListener('keydown', playAgain)
 
 //função callback
 function handleTryClick(event){
@@ -21,23 +17,39 @@ function handleTryClick(event){
 
   const inputNumber = document.querySelector("#inputNumber")
 
-  if(Number(inputNumber.value) == randomNumber){
-    toggleScreen()
-    screen2.querySelector("h2").innerText = `acertou em ${xAttempts} tentativas!`
+  console.log(Number(inputNumber))
+
+  if(inputNumber.value != "" && Number(inputNumber.value) >= 0 && Number(inputNumber.value) <= 10 && Number.isInteger(Number(inputNumber.value))){
+
+    if(Number(inputNumber.value) == randomNumber){
+      toggleScreen()
+      screen2.querySelector("h2").innerText = `acertou em ${xAttempts} tentativas!`
+      randomNumber = Math.round(Math.random() * 10)
+    }else{
+      alert("Você não acertou, tente novamente")
+    }
+  
+    inputNumber.value = ""
+    xAttempts++
+    // console.log(inputNumber.value) //lê o valor do input, no caso os números
+  }else{
+    return alert("Inválido, digite um número inteiro entre 0 e 10")
   }
 
-  inputNumber.value = ""
-  xAttempts++
-  // console.log(inputNumber.value) //lê o valor do input, no caso os números
-}
+ }
 
 function handleResetClick(){
   toggleScreen()
   xAttempts = 1;
-  randomNumber = Math.round(Math.random() * 10)
 }
 
 function toggleScreen(){
   screen1.classList.toggle("hide")
   screen2.classList.toggle("hide")
+}
+
+function playAgain(e){
+  if(e.key == 'Enter' && screen1.classList.contains('hide')){
+    handleResetClick()
+  }
 }
